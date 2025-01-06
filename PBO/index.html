@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <title>Toko Sembako</title>
+    <style>
+        /* CSS untuk tata letak produk */
+        #products {
+            display: flex;
+            flex-wrap: wrap; /* Produk akan turun ke baris berikutnya jika tidak muat */
+            gap: 16px; /* Jarak antar produk */
+            justify-content: center; /* Pusatkan produk secara horizontal */
+            padding: 0;
+            list-style: none;
+        }
+
+        /* Atur gaya item produk */
+        #products li {
+            flex: 1 1 calc(25% - 16px); /* Lebar 25% dikurangi jarak */
+            max-width: calc(25% - 16px); /* Batasi lebar maksimal */
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            background-color: #fff;
+            transition: transform 0.3s;
+        }
+
+        #products li:hover {
+            transform: scale(1.05); /* Efek zoom saat hover */
+        }
+
+        /* Gaya untuk gambar produk */
+        #products li img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        /* Gaya untuk tombol */
+        #products li button {
+            margin-top: 8px;
+            padding: 8px 16px;
+            border: none;
+            background-color: #007BFF;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        #products li button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Toko Sembako Online</h1>
+    </header>
+    <main>
+        <section id="product-list">
+            <h2>Daftar Produk</h2>
+            <ul id="products">
+                <li>
+                    <img src="beras.jpeg" alt="Beras 5kg">
+                    <h3>Beras 5kg</h3>
+                    <p>Rp15.000</p>
+                    <button data-price="15000">Tambah ke Keranjang</button>
+                </li>
+                <li>
+                    <img src="minyak goreng.jpeg" alt="Minyak Goreng">
+                    <h3>Minyak Goreng</h3>
+                    <p>Rp10.000</p>
+                    <button data-price="10000">Tambah ke Keranjang</button>
+                </li>
+                <li>
+                    <img src="gula.jpeg" alt="Gula Pasir 1kg">
+                    <h3>Gula Pasir 1kg</h3>
+                    <p>Rp5.000</p>
+                    <button data-price="5000">Tambah ke Keranjang</button>
+                </li>
+                <li>
+                    <img src="telor.jpeg" alt="Telor 1kg">
+                    <h3>Telor 1kg</h3>
+                    <p>Rp33.000</p>
+                    <button data-price="33000">Tambah ke Keranjang</button>
+                </li>
+                <!-- Tambahkan produk lainnya di sini -->
+            </ul>
+        </section>
+        <section id="cart">
+            <h2>Keranjang Belanja</h2>
+            <ul id="cart-items"></ul>
+            <p>Total: <span id="total-price">0</span></p>
+            <button id="checkout">Checkout</button>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2023 Toko Sembako Online</p>
+    </footer>
+    <script>
+        // Skrip interaktif untuk keranjang belanja
+        const productList = document.getElementById('products');
+        const cartItems = document.getElementById('cart-items');
+        const totalPrice = document.getElementById('total-price');
+        const checkoutButton = document.getElementById('checkout');
+
+        // Tambahkan produk ke keranjang
+        productList.addEventListener('click', (e) => {
+            if (e.target.tagName === 'BUTTON') {
+                const productName = e.target.previousElementSibling.previousElementSibling.textContent;
+                const productPrice = parseInt(e.target.dataset.price);
+
+                const listItem = document.createElement('li');
+                listItem.textContent = `${productName} - Rp${productPrice}`;
+                cartItems.appendChild(listItem);
+
+                const currentTotal = parseInt(totalPrice.textContent);
+                totalPrice.textContent = currentTotal + productPrice;
+            }
+        });
+
+        // Fungsi untuk tombol Checkout
+        checkoutButton.addEventListener('click', () => {
+            if (cartItems.children.length === 0) {
+                alert('Keranjang belanja Anda kosong!');
+                return;
+            }
+
+            const total = totalPrice.textContent;
+            const items = Array.from(cartItems.children).map(item => item.textContent).join('\n');
+
+            alert(`Terima kasih telah berbelanja di Toko Sembako Online!\n\nRincian belanja Anda:\n${items}\n\nTotal: Rp${total}`);
+            
+            // Kosongkan keranjang setelah checkout
+            cartItems.innerHTML = '';
+            totalPrice.textContent = '0';
+        });
+    </script>
+</body>
+</html>
